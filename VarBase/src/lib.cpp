@@ -2,9 +2,16 @@
 #include<sys/types.h>
 #include<sys/ipc.h>
 #include<sys/shm.h>
+#include<ctime>
 #define SHMSZ 2097152
 
-key_t SharedMemoryKey=27153925;
+key_t SharedMemoryKey;//=27153925;
+
+void MakeKey()
+{
+    srand(time(0));
+    SharedMemoryKey=(key_t)rand();
+}
 
 DoubleVar::DoubleVar(string newName)
 {

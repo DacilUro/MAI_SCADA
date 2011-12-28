@@ -27,6 +27,7 @@ int TestDeleteVar()
 
 int main()
 {
+    MakeKey();
     testLib.Create("testn","testv");
     testLib.Create("1",(int)1);
     cout<<"Add testn1 - 8:"<<endl;
