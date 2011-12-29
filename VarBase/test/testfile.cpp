@@ -53,8 +53,18 @@ int main()
     shmL=MakeSharedLibrary();
     shmL=new Library;
     shmL->Create("BB1","string");
-    shmL->Create("BLA","string");
+    shmL->Create("BL1","string");
+    cout<<"After create library in shared memory and add 2 elements"<<endl;
+    cout<<shmL->libr[0]->getName()<<" - "<<((StringVar*)shmL->libr[0])->getValue()<<endl;
+    cout<<shmL->libr[1]->getName()<<" - "<<((StringVar*)shmL->libr[1])->getValue()<<endl;
     shmL->Save();
+    shmL=new Library();
+    shmL->Load();
+    shmL->Create("BL2","string");
+    cout<<"After save, create new objects, load and add new element"<<endl;
+    cout<<shmL->libr[0]->getName()<<" - "<<((StringVar*)shmL->libr[0])->getValue()<<endl;
+    cout<<shmL->libr[1]->getName()<<" - "<<((StringVar*)shmL->libr[1])->getValue()<<endl;
+    cout<<shmL->libr[2]->getName()<<" - "<<((StringVar*)shmL->libr[2])->getValue()<<endl;
     shmdt(shmL);
     return 0;
 }
