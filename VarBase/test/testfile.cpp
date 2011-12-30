@@ -32,6 +32,7 @@ void* funk(void* arg)
     while(1)
     {
         ((IntVar*)cl->libr[2])->setValue(((IntVar*)cl->libr[2])->getValue()+1);
+        sleep(5);
     }
 }
 
@@ -41,6 +42,7 @@ void* funk1(void *arg)
     {
         Library* cl=MakeSharedLibrary();
         cout<<((IntVar*)cl->libr[2])->getValue()<<endl;
+        sleep(6);
     }
 }
 
@@ -80,7 +82,15 @@ int main()
     int args[2];
     args[0]=1;
     args[1]=2;
+    //while(1)
+    //{
         pthread_t pthread_id,ptid2;
         pthread_create(&pthread_id,NULL,funk,(void*)args[0]);
         pthread_create(&ptid2,NULL,funk1,(void*)args[1]);
+        while(1)
+        {
+            sleep(6);
+        }
+        //sleep(10);
+    //}
 }
