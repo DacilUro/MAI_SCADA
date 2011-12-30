@@ -1,4 +1,5 @@
 //tests
+#include "pthread.h"
 #include "../src/lib.cpp"
 Library testLib;
 string mVarName="testn1";
@@ -25,9 +26,27 @@ int TestDeleteVar()
     return 0;
 }
 
+void* funk(void* arg)
+{
+    Library* cl=MakeSharedLibrary();
+    while(1)
+    {
+        ((IntVar*)cl->libr[2])->setValue(((IntVar*)cl->libr[2])->getValue()+1);
+    }
+}
+
+void* funk1(void *arg)
+{
+    while(1)
+    {
+        Library* cl=MakeSharedLibrary();
+        cout<<((IntVar*)cl->libr[2])->getValue()<<endl;
+    }
+}
+
 int main()
 {
-    MakeKey();
+    //MakeKey();
     testLib.Create("testn","testv");
     testLib.Create("1",(int)1);
     cout<<"Add testn1 - 8:"<<endl;
@@ -51,20 +70,17 @@ int main()
     cout<<testLib.libr[1]->getName()<<" - "<<((IntVar*)testLib.libr[1])->getValue()<<endl;
     Library *shmL;
     shmL=MakeSharedLibrary();
-    shmL=new Library;
-    shmL->Create("BB1","string");
-    shmL->Create("BL1","string");
+    Library* cl=new(shmL) Library;
+    cl->Create("BB1","string");
+    cl->Create("BL1","string");
+    cl->Create("Int_prim",(int)1);
     cout<<"After create library in shared memory and add 2 elements"<<endl;
-    cout<<shmL->libr[0]->getName()<<" - "<<((StringVar*)shmL->libr[0])->getValue()<<endl;
-    cout<<shmL->libr[1]->getName()<<" - "<<((StringVar*)shmL->libr[1])->getValue()<<endl;
-    shmL->Save();
-    shmL=new Library();
-    shmL->Load();
-    shmL->Create("BL2","string");
-    cout<<"After save, create new objects, load and add new element"<<endl;
-    cout<<shmL->libr[0]->getName()<<" - "<<((StringVar*)shmL->libr[0])->getValue()<<endl;
-    cout<<shmL->libr[1]->getName()<<" - "<<((StringVar*)shmL->libr[1])->getValue()<<endl;
-    cout<<shmL->libr[2]->getName()<<" - "<<((StringVar*)shmL->libr[2])->getValue()<<endl;
-    shmdt(shmL);
-    return 0;
+    cout<<cl->libr[0]->getName()<<" - "<<((StringVar*)cl->libr[0])->getValue()<<endl;
+    cout<<cl->libr[1]->getName()<<" - "<<((StringVar*)cl->libr[1])->getValue()<<endl;
+    int args[2];
+    args[0]=1;
+    args[1]=2;
+        pthread_t pthread_id,ptid2;
+        pthread_create(&pthread_id,NULL,funk,(void*)args[0]);
+        pthread_create(&ptid2,NULL,funk1,(void*)args[1]);
 }

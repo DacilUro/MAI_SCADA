@@ -16,7 +16,7 @@ public:
     string getName();
 };
 
-class IntVar:protected Var //целочисленная переменная
+class IntVar: Var //целочисленная переменная
 {
     int mValue;
 public:
@@ -25,7 +25,7 @@ public:
     void setValue(int newValue);
 };
 
-class StringVar:protected Var  //строковая переменная
+class StringVar: Var  //строковая переменная
 {
     string mValue;
 public:
@@ -34,7 +34,7 @@ public:
     void setValue(string newValue);
 };
 
-class DoubleVar:protected Var //переменная с плавующей точкой
+class DoubleVar: Var //переменная с плавующей точкой
 {
     double mValue;
 public:

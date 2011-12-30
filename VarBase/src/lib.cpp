@@ -5,7 +5,7 @@
 #include<ctime>
 #define SHMSZ 2097152
 
-key_t SharedMemoryKey;//=27153925;
+key_t SharedMemoryKey=27153925;
 
 void MakeKey()
 {
