@@ -28,11 +28,11 @@ int TestDeleteVar()
 
 void* funk(void* arg)
 {
-    Library* cl=MakeSharedLibrary();
+    Library* cl=ConnectToSharedMemory();
     while(1)
     {
         ((IntVar*)cl->libr[2])->setValue(((IntVar*)cl->libr[2])->getValue()+1);
-        sleep(5);
+        sleep(2);
     }
 }
 
@@ -40,15 +40,14 @@ void* funk1(void *arg)
 {
     while(1)
     {
-        Library* cl=MakeSharedLibrary();
+        Library* cl=ConnectToSharedMemory();
         cout<<((IntVar*)cl->libr[2])->getValue()<<endl;
-        sleep(6);
+        sleep(2);
     }
 }
 
 int main()
 {
-    //MakeKey();
     testLib.Create("testn","testv");
     testLib.Create("1",(int)1);
     cout<<"Add testn1 - 8:"<<endl;
@@ -70,9 +69,10 @@ int main()
     cout<<"After save and load"<<endl;
     cout<<testLib.libr[0]->getName()<<" - "<<((StringVar*)testLib.libr[0])->getValue()<<endl;
     cout<<testLib.libr[1]->getName()<<" - "<<((IntVar*)testLib.libr[1])->getValue()<<endl;
-    Library *shmL;
-    shmL=MakeSharedLibrary();
-    Library* cl=new(shmL) Library;
+    Library *cl;
+    cl=CreateLibrary();
+    /*shmL=ConnectToSharedMemory();
+    Library* cl=new(shmL) Library;*/
     cl->Create("BB1","string");
     cl->Create("BL1","string");
     cl->Create("Int_prim",(int)1);
@@ -82,15 +82,12 @@ int main()
     int args[2];
     args[0]=1;
     args[1]=2;
-    //while(1)
-    //{
-        pthread_t pthread_id,ptid2;
-        pthread_create(&pthread_id,NULL,funk,(void*)args[0]);
-        pthread_create(&ptid2,NULL,funk1,(void*)args[1]);
-        while(1)
-        {
-            sleep(6);
-        }
-        //sleep(10);
-    //}
+    pthread_t pthread_id,ptid2;
+    pthread_create(&pthread_id,NULL,funk,(void*)args[0]);
+    pthread_create(&ptid2,NULL,funk1,(void*)args[1]);
+    while(1)
+    {
+        sleep(10);
+        cl->Save();
+    }
 }

@@ -1,11 +1,6 @@
 #include"../include/basecode.h"
-#include<sys/types.h>
-#include<sys/ipc.h>
-#include<sys/shm.h>
-#include<ctime>
-#define SHMSZ 2097152
 
-key_t SharedMemoryKey=27153925;
+key_t SharedMemoryKey;
 
 void MakeKey()
 {
@@ -197,7 +192,7 @@ int Library::Save()
     return 1;
 }
 
-Library* MakeSharedLibrary()
+Library* ConnectToSharedMemory()
 {
     int shmid;
     if((shmid=shmget(SharedMemoryKey,SHMSZ, IPC_CREAT | 0666))<0)
@@ -207,4 +202,12 @@ Library* MakeSharedLibrary()
     Library *shml;
     shml=(Library *)shmat(shmid,NULL,0);
     return shml;
+}
+
+Library* CreateLibrary()
+{
+    MakeKey();
+    Library* SMM=ConnectToSharedMemory();
+    Library* SML=new(SMM) Library;
+    return SML;
 }
